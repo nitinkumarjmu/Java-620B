@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servlet & JSP Applications</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #0d1117;
+            padding: 20px;
+            color: #c9d1d9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #58a6ff;
+            margin-bottom: 30px;
+        }
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 0;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab {
+            padding: 12px 24px;
+            background: #e9ecef;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            border-radius: 5px 5px 0 0;
+            transition: background 0.3s;
+        }
+        .tab:hover {
+            background: #dee2e6;
+        }
+        .tab.active {
+            background: white;
+            border-bottom: 2px solid white;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 0 5px 5px 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .tab-content.active {
+            display: block;
+        }
+        h2 {
+            color: #495057;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #007bff;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="date"],
+        select {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button.secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+        button.secondary:hover {
+            background: #545b62;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .search-box input {
+            flex: 0 0 300px;
+            margin: 0;
+        }
+        .search-box button {
+            margin: 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Web Applications Using Servlets and JSP</h1>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab(0)">Part A: User Login</button>
+            <button class="tab" onclick="showTab(1)">Part B: Employee Records</button>
+            <button class="tab" onclick="showTab(2)">Part C: Student Attendance</button>
+        </div>
+
+        <!-- Part A: Login -->
+        <div class="tab-content active">
+            <h2>User Login Using Servlet and HTML Form</h2>
+            <div class="info">
+                <strong>Credentials:</strong> Username: admin | Password: pass123
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <div id="loginResult" class="result"></div>
+        </div>
+
+        <!-- Part B: Employee Records -->
+        <div class="tab-content">
+            <h2>Display Employee Records with JDBC and Servlet Integration</h2>
+            <div class="search-box">
+                <label style="margin: 0;">Search by Employee ID:</label>
+                <input type="text" id="searchEmpId" placeholder="Enter Employee ID">
+                <button onclick="searchEmployee()">Search</button>
+                <button class="secondary" onclick="showAllEmployees()">Show All</button>
+            </div>
+            <div id="employeeResult"></div>
+        </div>
+
+        <!-- Part C: Attendance Portal -->
+        <div class="tab-content">
+            <h2>Student Attendance Portal Using JSP and Servlet</h2>
+            <form onsubmit="handleAttendance(event)">
+                <div class="form-group">
+                    <label>Student ID:</label>
+                    <input type="text" id="studentId" required>
+                </div>
+                <div class="form-group">
+                    <label>Date:</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label>Status:</label>
+                    <select id="status" required>
+                        <option value="">-- Select Status --</option>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                    </select>
+                </div>
+                <button type="submit">Submit Attendance</button>
+            </form>
+            <div id="attendanceResult" class="result"></div>
+            <div id="attendanceHistory"></div>
+        </div>
+    </div>
+
+    <script>
+        const employees = [
+            { empId: 101, name: 'John Doe', salary: 50000 },
+            { empId: 102, name: 'Jane Smith', salary: 60000 },
+            { empId: 103, name: 'Bob Johnson', salary: 55000 },
+            { empId: 104, name: 'Alice Williams', salary: 62000 },
+            { empId: 105, name: 'Charlie Brown', salary: 48000 }
+        ];
+
+        let attendanceRecords = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            showAllEmployees();
+        });
+
+        function showTab(index) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach((tab, i) => tab.classList.toggle('active', i === index));
+            contents.forEach((content, i) => content.classList.toggle('active', i === index));
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const result = document.getElementById('loginResult');
+            
+            if (username === 'admin' && password === 'pass123') {
+                result.className = 'result success show';
+                result.innerHTML = `<h3>Welcome, ${username}!</h3><p>Login successful.</p>`;
+            } else {
+                result.className = 'result error show';
+                result.innerHTML = `<h3>Login Failed</h3><p>Invalid username or password.</p>`;
+            }
+        }
+
+        function showAllEmployees() {
+            displayEmployees(employees);
+        }
+
+        function searchEmployee() {
+            const searchId = parseInt(document.getElementById('searchEmpId').value);
+            if (!searchId) {
+                alert('Please enter an Employee ID');
+                return;
+            }
+            const found = employees.filter(emp => emp.empId === searchId);
+            if (found.length > 0) {
+                displayEmployees(found);
+            } else {
+                document.getElementById('employeeResult').innerHTML = 
+                    `<div class="result error show"><p>No employee found with ID: ${searchId}</p></div>`;
+            }
+        }
+
+        function displayEmployees(empList) {
+            let html = `<table><thead><tr><th>EmpID</th><th>Name</th><th>Salary</th></tr></thead><tbody>`;
+            empList.forEach(emp => {
+                html += `<tr><td>${emp.empId}</td><td>${emp.name}</td><td>$${emp.salary.toLocaleString()}</td></tr>`;
+            });
+            html += `</tbody></table><p style="margin-top: 15px;"><strong>Total Records:</strong> ${empList.length}</p>`;
+            document.getElementById('employeeResult').innerHTML = html;
+        }
+
+        function handleAttendance(e) {
+            e.preventDefault();
+            const studentId = document.getElementById('studentId').value;
+            const date = document.getElementById('date').value;
+            const status = document.getElementById('status').value;
+            const result = document.getElementById('attendanceResult');
+            
+            attendanceRecords.push({ studentId, date, status });
+            
+            result.className = 'result success show';
+            result.innerHTML = `<h3>Success!</h3>
+                <p>Attendance marked for Student ID: ${studentId}</p>
+                <p>Date: ${date}</p>
+                <p>Status: ${status}</p>`;
+            
+            document.getElementById('studentId').value = '';
+            document.getElementById('status').value = '';
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            
+            displayAttendanceHistory();
+        }
+
+        function displayAttendanceHistory() {
+            if (attendanceRecords.length === 0) return;
+            let html = `<h3 style="margin-top: 30px;">Recent Attendance Records</h3>
+                <table><thead><tr><th>Student ID</th><th>Date</th><th>Status</th></tr></thead><tbody>`;
+            attendanceRecords.slice(-5).reverse().forEach(record => {
+                html += `<tr><td>${record.studentId}</td><td>${record.date}</td><td>${record.status}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            document.getElementById('attendanceHistory').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
